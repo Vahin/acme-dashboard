@@ -10,6 +10,7 @@ import {
 } from './definitions';
 import { formatCurrency } from './utils';
 import { unstable_noStore as noStore } from 'next/cache';
+import { notFound } from 'next/navigation';
 
 export async function fetchRevenue() {
   // Add noStore() here to prevent the response from being cached.
@@ -157,6 +158,7 @@ export async function fetchInvoiceById(id: string) {
   noStore();
 
   try {
+    console.log('DATA -------->>>     BEFORE SQL');
     const data = await sql<InvoiceForm>`
       SELECT
         invoices.id,
@@ -166,6 +168,8 @@ export async function fetchInvoiceById(id: string) {
       FROM invoices
       WHERE invoices.id = ${id};
     `;
+
+    console.log('DATA -------->>>    ', data);
 
     const invoice = data.rows.map((invoice) => ({
       ...invoice,

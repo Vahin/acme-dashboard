@@ -1,7 +1,7 @@
-import { updateInvoice } from '@/app/lib/actions';
 import { fetchCustomers, fetchInvoiceById } from '@/app/lib/data';
 import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
 import Form from '@/app/ui/invoices/edit-form';
+import { notFound } from 'next/navigation';
 
 const EditInvoicePage = async ({ params }: { params: { id: string } }) => {
   const id = params.id;
@@ -9,6 +9,10 @@ const EditInvoicePage = async ({ params }: { params: { id: string } }) => {
     fetchInvoiceById(id),
     fetchCustomers(),
   ]);
+
+  if (!invoice) {
+    notFound();
+  }
 
   return (
     <main>
